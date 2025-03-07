@@ -1,39 +1,37 @@
 import streamlit as st
 
-# Initialize task list
-tasks = []
+# Initialize session state for tasks if not already created
+if "tasks" not in st.session_state:
+    st.session_state.tasks = []
 
-# Streamlit UI
-st.title("📝 To-Do List App") #print=
+# Title
+st.title("📝 To-Do List App")
 
-# Input box to add tasks
-new_task = st.text_input("Enter a new task:") #input
+# Input field for new task
+task = st.text_input("Enter a task:")
 
-if st.button("➕ Add Task"): #if statement
-    if new_task:
-        tasks.append(new_task)
-        st.success(f"Added: {new_task}")
+# Add Task Button
+if st.button("Add Task"):
+    if task:
+        st.session_state.tasks.append(task)  # Store in session state
+        st.success("Task added!")
     else:
-        st.warning("⚠️ Please enter a task.")
+        st.warning("Please enter a task.")
 
 # Display tasks
-st.subheader("📋 Your Tasks:")
-if tasks:
-    for i, task in enumerate(tasks, 1):
+st.subheader("Your Tasks:")
+if st.session_state.tasks:
+    for i, task in enumerate(st.session_state.tasks, 1):
         st.write(f"{i}. {task}")
 else:
-    st.info("No tasks added yet.")
+    st.write("No tasks added yet.")
 
-# Input box to remove tasks
-task_to_remove = st.text_input("Enter a task to remove:")
-
-if st.button("🗑️ Remove Task"):
-    if task_to_remove in tasks:
-        tasks.remove(task_to_remove)
-        st.success(f"Removed: {task_to_remove}")
+# Remove Task
+remove_task = st.text_input("Enter the exact task to remove:")
+if st.button("Remove Task"):
+    if remove_task in st.session_state.tasks:
+        st.session_state.tasks.remove(remove_task)
+        st.success("Task removed!")
     else:
-        st.error("❌ Task not found.")
+        st.warning("Task not found.")
 
-
-
-        
